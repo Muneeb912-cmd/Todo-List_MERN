@@ -1,5 +1,5 @@
 {
-  "name": "todolist-mern",
+  "name": "projectui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,31 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "11.10.5",
+    "@emotion/styled": "11.10.5",
+    "@mui/icons-material": "5.10.9",
+    "@mui/material": "5.10.13",
+    "@mui/x-data-grid": "5.17.10",
+    "@mui/x-date-pickers": "^6.11.1",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "bootstrap": "^5.3.1",
+    "dayjs": "^1.11.9",
+    "formik": "^2.2.9",
+    "mdb-react-ui-kit": "^6.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
+    "react-multi-carousel": "^2.8.4",
+    "react-pro-sidebar": "1.0.0-alpha.7",
+    "react-redux": "^8.1.2",
+    "react-router-dom": "6.4.3",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4",
+    "yup": "0.32.11"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
