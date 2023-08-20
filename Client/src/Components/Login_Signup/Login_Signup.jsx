@@ -7,16 +7,17 @@ import {
   MDBTabsLink,
   MDBTabsContent,
   MDBTabsPane,
-  MDBBtn,  
+  MDBBtn,
   MDBInput,
   MDBCheckbox
 }
-from 'mdb-react-ui-kit';
-import * as Icon from "react-icons/bs";
+  from 'mdb-react-ui-kit';
 
 function Login_SignUp() {
 
   const [justifyActive, setJustifyActive] = useState('tab1');
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [signupData, setSignupData] = useState({ name: '', username: '', email: '', password: '' });
 
   const handleJustifyClick = (value) => {
     if (value === justifyActive) {
@@ -24,6 +25,50 @@ function Login_SignUp() {
     }
 
     setJustifyActive(value);
+  };
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        console.log('Login successful',data.token);
+      } else {
+        // Handle login failure (e.g., show an error message)
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleSignup = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signupData),
+      });
+
+      if (response.ok) {
+        // Signup successful, handle the response accordingly (e.g., redirect or display a message)
+        console.log('Signup successful');
+      } else {
+        // Handle signup failure (e.g., show an error message)
+        console.error('Signup failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -45,51 +90,70 @@ function Login_SignUp() {
       <MDBTabsContent>
 
         <MDBTabsPane show={justifyActive === 'tab1'}>
-
-          <div className="text-center mb-3">
-            <p>Sign in with:</p>
-
-         
-            <MDBBtn className="mb-2 w-100 text-black border border-dark btn btn-light "><Icon.BsGoogle style={{marginRight:'8px', marginBottom:'3px'}}></Icon.BsGoogle>google</MDBBtn>
-            
-
-            <p className="text-center mt-3">or:</p>
-          </div>
-
-          <MDBInput wrapperClass='mb-4' label='Email address' id='form1' type='email'/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='form2' type='password'/>
-
-          <div className="d-flex justify-content-between mx-0 mb-4">
-            <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' />
-            <a href="!#">Forgot password?</a>
-          </div>
-
-          <MDBBtn className="mb-4 w-100">Sign in</MDBBtn>
-          <p className="text-center">{`Don't have an account? `}<a onClick={()=>{handleJustifyClick('tab2')}} href="#!">Register</a></p>
-
+          <h4>Login Here :</h4>
+          <MDBInput
+            wrapperClass='mb-4'
+            label='Email address'
+            id='form1'
+            type='email'
+            value={loginData.email}
+            onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+          />
+          <MDBInput
+            wrapperClass='mb-4'
+            label='Password'
+            id='form2'
+            type='password'
+            value={loginData.password}
+            onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+          />
+          <MDBBtn className="mb-4 w-100" onClick={handleLogin}>
+            Sign in
+          </MDBBtn>
+          <p className="text-center">Already got and account? <a onClick={() => { handleJustifyClick('tab1') }} href="#!">Login</a></p>
         </MDBTabsPane>
 
         <MDBTabsPane show={justifyActive === 'tab2'}>
-
-          <div className="text-center mb-3">
-            <p>Sign up with:</p>
-
-            <MDBBtn className="mb-2 w-100 text-black border border-dark btn btn-light "><Icon.BsGoogle style={{marginRight:'8px', marginBottom:'3px'}}></Icon.BsGoogle>google</MDBBtn>
-
-            <p className="text-center mt-3">or:</p>
-          </div>
-
-          <MDBInput wrapperClass='mb-4 ' label='Name' id='form1' type='text'/>
-          <MDBInput wrapperClass='mb-4' label='Username' id='form1' type='text'/>
-          <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email'/>
-          <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password'/>
-
+          <h4>Create Account Here :</h4>
+          <MDBInput
+            wrapperClass='mb-4'
+            label='Name'
+            id='form1'
+            type='text'
+            value={signupData.name}
+            onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
+          />
+          <MDBInput
+            wrapperClass='mb-4'
+            label='Username'
+            id='form1'
+            type='text'
+            value={signupData.username}
+            onChange={(e) => setSignupData({ ...signupData, username: e.target.value })}
+          />
+          <MDBInput
+            wrapperClass='mb-4'
+            label='Email'
+            id='form1'
+            type='email'
+            value={signupData.email}
+            onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+          />
+          <MDBInput
+            wrapperClass='mb-4'
+            label='Password'
+            id='form1'
+            type='password'
+            value={signupData.password}
+            onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+          />
           <div className='d-flex justify-content-center mb-4'>
             <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I have read and agree to the terms' />
           </div>
-
-          <MDBBtn className="mb-4 w-100">Sign up</MDBBtn>
-          <p className="text-center">Already got and account? <a onClick={()=>{handleJustifyClick('tab1')}} href="#!">Login</a></p>
+          <MDBBtn className="mb-4 w-100" onClick={handleSignup}>
+            Sign up
+          </MDBBtn>
+          <p className="text-center">Already got and account? <a onClick={() => { handleJustifyClick('tab1') }} href="#!">Login</a></p>
         </MDBTabsPane>
 
       </MDBTabsContent>

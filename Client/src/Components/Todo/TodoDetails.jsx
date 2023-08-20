@@ -22,7 +22,7 @@ export default function TodoDetails({Data,handleCloseDetails}) {
                 <MDBCardHeader className=' bg-light'><strong>Status : </strong>{Data.status}</MDBCardHeader>
                 <MDBCardBody>
                     <MDBCardTitle><strong>{Data.title}</strong></MDBCardTitle>
-                    <MDBCardText><p style={{ textAlign: 'justify' }}>Todo-Content</p></MDBCardText>
+                    <MDBCardText><p style={{ textAlign: 'justify' }}>{Data.message}</p></MDBCardText>
                     <p>
                         <strong>Created On : </strong>15-8-23
                         <br></br>

@@ -3,13 +3,13 @@ import * as Icon from "react-icons/ai"
 import AddTodoModal from '../PopUp/TodoModal';
 import { useState } from 'react';
 import TodoDetails from './TodoDetails';
-import todoData from './dummyData'; // Update the path accordingly
 
 
 const TodoList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDetailsOpen, setDetailsOpen] = useState(false);
     const [Details, setDetails] = useState({});
+    const [todoData,setTodoData]=useState([])
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
@@ -23,6 +23,33 @@ const TodoList = () => {
     const handleCloseDetails = () => {
         setDetailsOpen(false);
     };
+
+    const handleRefreshClicked = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('http://localhost:5000/api/getTodos', {
+            method: 'GET',
+            headers: {
+              'Authorization': token,
+            },
+          });
+      
+          if (response.ok) {
+            // Parse the response data using .json()
+            const todosData = await response.json();
+            
+            // Update your state or UI with the todos data
+            setTodoData(todosData);
+          } else {
+            // Handle errors, e.g., display an error message to the user
+            console.error('Error:', response.status);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+
     return (
         <>
             <AddTodoModal isOpen={isModalOpen} onClose={handleCloseModal} />
@@ -30,7 +57,10 @@ const TodoList = () => {
                 <h1>Your Todo List</h1>
                 <hr></hr>
                 {isDetailsOpen === true && <TodoDetails Data={Details} handleCloseDetails={handleCloseDetails} />}
-                <div className='d-flex justify-content-end my-3'>
+                <div className='d-flex justify-content-between my-3'>
+                <MDBBtn className='mx-2' color='secondary' onClick={handleRefreshClicked}>
+                        Refresh
+                    </MDBBtn>
                     <MDBBtn className='mx-2' color='secondary' onClick={handleOpenModal}>
                         Add Todo
                     </MDBBtn>

@@ -20,31 +20,38 @@ function AddTodoForm() {
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [message, setMessage] = useState('');
+    const [status, setStatus] = useState('In-Progress');
   
     const handleSubmit = async (event) => {
-      event.preventDefault();
-  
-      // Prepare data for submission
+      event.preventDefault(); 
+      const token = localStorage.getItem('token'); 
+
+      if (!token) {
+        console.error('User not authenticated');
+        return;
+      }
       const todoData = {
         title,
         dueDate: date,
         message,
+        status
       };
       console.log(todoData);
-      try {
-        // Send the data to the server
-        const response = await fetch('http://localhost:5000/addTodo', {
+      try {       
+        const response = await fetch('http://localhost:5000/api/addTodo', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': token,
           },
           body: JSON.stringify(todoData),
-        });
-  
-        // Handle the server response as needed
-        if (response.ok) {
-          // Data sent successfully, you might want to update UI or show a message
+        }); 
+       
+        if (response.ok) {         
           console.log('Todo added successfully');
+          setTitle('');
+          setDate('');
+          setMessage('');
         } else {
           console.error('Error adding todo');
         }
@@ -86,7 +93,7 @@ function AddTodoForm() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <MDBBtn type="submit" className="my-4 mb-4 w-100">
+        <MDBBtn type="submit" className="my-4 mb-4 w-100" >
           Add Todo
         </MDBBtn>
       </form>
