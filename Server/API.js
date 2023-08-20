@@ -59,7 +59,7 @@ function authenticateUser(req, res, next) {
       return res.status(401).json({ message: 'Invalid token' });
     }
 
-    req.user = { _id: decoded.userId }; /
+    req.user = { _id: decoded.userId }; 
     next();
   });
 }
@@ -75,5 +75,43 @@ router.get('/getTodos', authenticateUser, async (req, res) => {
     res.status(500).json({ message: 'An error occurred' });
   }
 });
+
+router.delete('/deleteTodo/:todoId', authenticateUser, async (req, res) => {
+  try {
+      const todoId = req.params.todoId;
+      const userId = req.user._id;     
+      const todo = await mongodb.getTodoById(todoId);    
+      if (!todo || todo.userID !== userId) {
+          return res.status(404).json({ message: 'Todo not found' });
+      }
+
+      const result = await mongodb.deleteTodo(todoId);
+      res.json(result);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'An error occurred' });
+  }
+});
+
+router.put('/updateTodo/:todoId', authenticateUser, async (req, res) => {
+  try {
+      const todoId = req.params.todoId;
+      const userId = req.user._id;
+      const updatedTodoData = req.body;
+
+      const todo = await mongodb.getTodoById(todoId);
+
+      if (!todo || todo.userID !== userId) {
+          return res.status(404).json({ message: 'Todo not found' });
+      }
+
+      const result = await mongodb.updateTodo(todoId, updatedTodoData);
+      res.json(result);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'An error occurred' });
+  }
+});
+
 
 module.exports = router;

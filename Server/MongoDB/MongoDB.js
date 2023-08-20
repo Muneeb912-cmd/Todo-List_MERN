@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient,ObjectId  } = require('mongodb');
 const bcrypt = require('bcrypt');
 require('dotenv').config(); 
 
@@ -110,6 +110,57 @@ async function getUserByEmail(email) {
     }
 }
 
+async function getTodoById(todoId) {
+    let Connection;
+    try {
+     
+        Connection=await client.connect();
+        const db = client.db('TodoList');
+        const todosCollection = db.collection('Todos');      
+        const objectId = new ObjectId(todoId);
+        const todo = await todosCollection.findOne({ _id: objectId });       
+        return todo;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }finally {
+        Connection.close();
+    }
+}
 
 
-module.exports = { signup, login, addTodo, getTodos,FindTodo,getUserByEmail };
+async function deleteTodo(todoId) {
+    console.log(todoId)
+    let connection;
+    try {
+        connection = await client.connect();
+        const db = connection.db('TodoList');
+        const todosCollection = db.collection('Todos');
+        const objectId = new ObjectId(todoId);
+        const result = await todosCollection.deleteOne({ _id: objectId });
+        return result;
+    } finally {
+        if (connection) {
+            connection.close();
+        }
+    }
+}
+
+async function updateTodo(todoId, updatedTodoData) {
+    let connection;
+    try {
+        connection = await client.connect();
+        const db = connection.db('TodoList');
+        const todosCollection = db.collection('Todos');
+       
+        const result = await todosCollection.updateOne({ _id: todoId }, { $set: updatedTodoData });
+        return result;
+    } finally {
+        if (connection) {
+            connection.close();
+        }
+    }
+}
+
+
+module.exports = { getTodoById,signup,deleteTodo,updateTodo, login, addTodo, getTodos,FindTodo,getUserByEmail };
