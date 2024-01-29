@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config(); 
 
 // Update the MONGODB_URI to point to your MongoDB Compass instance
-const uri = "mongodb+srv://Muneeb912:Muneeb912@cluster0.hpdxycm.mongodb.net/TodoList";
+const uri = "Your connection string";
 
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
